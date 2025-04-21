@@ -1,0 +1,2 @@
+# SkipAppSwitchWarn
+Flyme11自动授权自动记账打开钱迹同步账单
