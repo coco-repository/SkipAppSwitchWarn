@@ -46,10 +46,11 @@ public class MainHook implements IXposedHookLoadPackage {
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     Log.i(TAG, "hook success：beforeHookedMethod \"onCreate\"");
                     Activity activity = (Activity) param.thisObject;
+                    activity.overridePendingTransition(0, 0);
                     Intent intent = activity.getIntent();
                     String sourceApp = intent.getStringExtra(EXTRA_SOURCE_PACAKGE_NAME);
                     String targetApp = intent.getStringExtra(EXTRA_TARGET_PACAKGE_NAME);
-                    if (SOURCE_APP.equals(sourceApp) && TARGET_APP.equals(targetApp)) {
+                    if (TARGET_APP.equals(targetApp)) {
                         Log.i(TAG, "自动跳转授权： " + sourceApp + " -> " + targetApp);
                         IntentSender targetSender = intent.getParcelableExtra(Intent.EXTRA_INTENT);
                         int requestCode = intent.getIntExtra(EXTRA_REQUEST_CODE, -1);
@@ -66,6 +67,7 @@ public class MainHook implements IXposedHookLoadPackage {
                         }
                         reportProcessStartEvent(lpparam, intent, sourceApp, targetApp);
                         activity.finish();
+                        activity.overridePendingTransition(0, 0);
                         param.setResult(null);
                     }
                 }
